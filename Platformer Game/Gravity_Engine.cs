@@ -7,7 +7,21 @@ namespace Platformer_Game
         private static int gravity = 10;
         private static int airSpeed;
 
-        public static int FallingGravity(PictureBox obj)
+        private static int xSpeed = 0;
+        private static int momentum = 10;
+
+
+        public static int MomentumCalculater()
+        {
+            if (xSpeed <= momentum)
+            {
+                xSpeed++;
+                return xSpeed;
+            }
+            else
+                return xSpeed;
+        }
+        public static int FallingGravity()
         {
             if (airSpeed <= gravity)
             {
@@ -18,7 +32,7 @@ namespace Platformer_Game
                 return airSpeed;
         }
 
-        public static int JumpGravity(PictureBox obj)
+        public static int JumpGravity()
         {
 
             if (airSpeed > 0)
@@ -43,7 +57,9 @@ namespace Platformer_Game
                 case "Down":
                     airSpeed = 0;
                     break;
-
+                case "Stop":
+                    xSpeed = 0;
+                    break;
         }
         }
     }

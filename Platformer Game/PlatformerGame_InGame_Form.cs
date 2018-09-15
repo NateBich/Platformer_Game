@@ -27,25 +27,37 @@ namespace Platformer_Game
 
             Player_Engine.PlayerUpdate();
 
-            Player_PictureBox.Location = new Point(Player_Engine.player.Location.X, Player_Engine.player.Location.Y);
+            Player_PictureBox.Location = new Point(player.Location.X, player.Location.Y);
         }
 
         private void PlayerMovement_KeysDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyData)
+
+            if (Player_Engine.IsGrounded())
             {
-                case Keys.A:
+                if (e.KeyData == Keys.A)
+                {
+                    Player_Engine.moveLeft = true;                    
+                }
+
+                else if (e.KeyData == Keys.A && e.KeyData == Keys.Space)
+                {
                     Player_Engine.moveLeft = true;
-                    break;
+                    Player_Engine.canJump = true;                    
+                }
 
-                case Keys.D:
+                else if (e.KeyData == Keys.D)                
                     Player_Engine.moveRight = true;
-                    break;
+                                   
+                else if (e.KeyData == Keys.D && e.KeyData == Keys.Space)
+                {
+                    Player_Engine.moveRight = true;
+                    Player_Engine.canJump = true;
+                }
 
-                case Keys.Space:
-                    if (Player_Engine.IsGrounded())
-                        Player_Engine.canJump = true;
-                    break;
+                else if (e.KeyData == Keys.Space)
+                    Player_Engine.canJump = true;
+                
             }
         }
 
@@ -54,11 +66,17 @@ namespace Platformer_Game
             switch (e.KeyData)
             {
                 case Keys.A:
-                    Player_Engine.moveLeft = false;
+                    if (Player_Engine.IsGrounded())
+                        Player_Engine.moveLeft = false;
+                    else
+                        Player_Engine.moveLeft = true;
                     break;
 
                 case Keys.D:
-                    Player_Engine.moveRight = false;
+                    if (Player_Engine.IsGrounded())
+                        Player_Engine.moveRight = false;
+                    else
+                        Player_Engine.moveRight = true;
                     break;
 
                 case Keys.Space:

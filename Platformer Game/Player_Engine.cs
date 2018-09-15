@@ -7,7 +7,7 @@ namespace Platformer_Game
     class Player_Engine
     {     
         private static bool isGrounded = false;
-        private static int playerSpeed = 10, playerMomentum = 0;        
+       // private static int playerSpeed = 10, playerMomentum = 0;        
        
         //<>
         public static PictureBox player;
@@ -28,30 +28,77 @@ namespace Platformer_Game
             playerY = PlatformerGame_InGame_Form.player.Location.Y;
 
             PlayerCollisionCheck();
+            PlatformerGame_InGame_Form.player.Location = new Point(MovePlayer(playerX), JumpPlayer(playerY));
+        }
 
-            MovePlayer(playerX);
-
+        private static int JumpPlayer(int y)
+        {
             if (isGrounded && canJump)
             {
                 Gravity_Engine.SetAirSpeed("Up");
-                playerY -= Gravity_Engine.JumpGravity(player);
+                y -= Gravity_Engine.JumpGravity();
                 isGrounded = false;
             }
 
-            if (!isGrounded && canJump)
-                playerY -= Gravity_Engine.JumpGravity(player);
+            else if (!isGrounded && canJump)
+                y -= Gravity_Engine.JumpGravity();
 
-            if (!isGrounded && !canJump)
-            {                
-                playerY += Gravity_Engine.FallingGravity(player);                
+            else if (!isGrounded && !canJump)
+            {
+                y += Gravity_Engine.FallingGravity();
             }
-
-            PlayerCollisionCheck();
-
-            PlatformerGame_InGame_Form.player.Location = new Point(playerX, playerY);
+            return y;
         }
 
-        //private static void 
+        private static int MovePlayer(int x)
+        {
+            int noChangeX = x;
+
+            if (isGrounded)
+            {
+                if (moveLeft)
+                {
+                    x -= Gravity_Engine.MomentumCalculater();                    
+                }
+                else if (moveRight)
+                {
+                    x += Gravity_Engine.MomentumCalculater();                    
+                }
+                else
+                {
+                    if (Gravity_Engine.MomentumCalculater() > 0)
+                    {
+                        if (x < noChangeX)
+                            x += Gravity_Engine.MomentumCalculater();
+                        else if (x > noChangeX)
+                            x -= Gravity_Engine.MomentumCalculater();                      
+                    }
+                    else
+                    {
+                        Gravity_Engine.SetAirSpeed("Stop");
+                    }
+                    Console.WriteLine(Gravity_Engine.MomentumCalculater());
+                }
+            }
+            else
+            {
+                if (moveLeft)
+                {
+                    x -= Gravity_Engine.MomentumCalculater();
+                }
+                else if (moveRight)
+                {
+                    x += Gravity_Engine.MomentumCalculater();
+                }
+            }
+            return x;
+        }
+
+        public static bool IsGrounded()
+        {
+            return isGrounded;
+        }
+
         private static void PlayerCollisionCheck()
         {
             if (!isGrounded)
@@ -59,55 +106,17 @@ namespace Platformer_Game
                 if (Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
                 {
                     isGrounded = true;
+
+                    moveLeft = false;
+
+                    moveRight = false;
+
                 }
             }
+            else if (!Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
+                isGrounded = false;
             else
-                return;            
+                return;
         }
-
-        private static void MovePlayer(int x)
-        {
-            int noChangeX = x;
-            if (moveLeft)
-            {                
-                if (playerMomentum <= playerSpeed)
-                {
-                    playerMomentum++;
-                }
-
-                x -= playerMomentum;                
-            }
-            else if (moveRight)
-            {
-                if (playerMomentum <= playerSpeed)
-                {
-                    playerMomentum++;
-                }
-                x += playerMomentum;
-            }
-            else
-            {
-                if (playerMomentum > 0)
-                {
-                    playerMomentum--;
-
-                    if (noChangeX > x)
-                        x -= playerMomentum;
-                    else //if (noChangeX < x)
-                        x += -playerMomentum;
-                }
-               
-            }
-
-            playerX = x;
-
-            }
-
-        public static bool IsGrounded()
-        {
-            return isGrounded;
-        }
-
-
     }
 }
