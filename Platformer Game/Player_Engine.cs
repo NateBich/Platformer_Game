@@ -6,8 +6,7 @@ namespace Platformer_Game
 {
     class Player_Engine
     {     
-        private static bool isGrounded = false;
-       // private static int playerSpeed = 10, playerMomentum = 0;        
+        private static bool isGrounded = false;             
        
         //<>
         public static PictureBox player;
@@ -58,37 +57,37 @@ namespace Platformer_Game
             {
                 if (moveLeft)
                 {
-                    x -= Gravity_Engine.MomentumCalculater();                    
+                    x -= Gravity_Engine.ExcellerateCalculater();                    
                 }
                 else if (moveRight)
                 {
-                    x += Gravity_Engine.MomentumCalculater();                    
+                    x += Gravity_Engine.ExcellerateCalculater();                    
                 }
                 else
                 {
-                    if (Gravity_Engine.MomentumCalculater() > 0)
+                    if (Gravity_Engine.ExcellerateCalculater() > 0)
                     {
                         if (x < noChangeX)
-                            x += Gravity_Engine.MomentumCalculater();
+                            x += Gravity_Engine.ExcellerateCalculater();
                         else if (x > noChangeX)
-                            x -= Gravity_Engine.MomentumCalculater();                      
+                            x -= Gravity_Engine.ExcellerateCalculater();                      
                     }
                     else
                     {
                         Gravity_Engine.SetAirSpeed("Stop");
                     }
-                    Console.WriteLine(Gravity_Engine.MomentumCalculater());
+                    Console.WriteLine(Gravity_Engine.ExcellerateCalculater());
                 }
             }
             else
             {
                 if (moveLeft)
                 {
-                    x -= Gravity_Engine.MomentumCalculater();
+                    x -= Gravity_Engine.ExcellerateCalculater();
                 }
                 else if (moveRight)
                 {
-                    x += Gravity_Engine.MomentumCalculater();
+                    x += Gravity_Engine.ExcellerateCalculater();
                 }
             }
             return x;
@@ -99,22 +98,31 @@ namespace Platformer_Game
             return isGrounded;
         }
 
+        public static bool CanJump()
+        {
+            return canJump;
+        }
+
         private static void PlayerCollisionCheck()
         {
-            if (!isGrounded)
+            //if (!Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
+            //    isGrounded = false;
+            
+            
+            if (Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
             {
-                if (Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
+                Console.WriteLine("Made Collision");
+                if (!isGrounded)
                 {
                     isGrounded = true;
+                    Console.WriteLine("Made Collision");
+                } 
 
-                    moveLeft = false;
 
-                    moveRight = false;
 
-                }
             }
-            else if (!Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
-                isGrounded = false;
+            //else if (!Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
+            //    isGrounded = false;
             else
                 return;
         }

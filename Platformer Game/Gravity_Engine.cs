@@ -11,16 +11,28 @@ namespace Platformer_Game
         private static int momentum = 10;
 
 
-        public static int MomentumCalculater()
+        public static int ExcellerateCalculater()
         {
             if (xSpeed <= momentum)
             {
                 xSpeed++;
-                return xSpeed;
+                //return xSpeed;
             }
-            else
+            //else
                 return xSpeed;
         }
+
+        public static int DeExcellerateCalculater()
+        {
+            if (xSpeed > 0 )
+            {
+                
+                xSpeed -= 1;
+
+            }
+            return xSpeed;
+        }
+
         public static int FallingGravity()
         {
             if (airSpeed <= gravity)
