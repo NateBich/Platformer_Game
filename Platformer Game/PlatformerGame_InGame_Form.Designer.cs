@@ -70,6 +70,7 @@ namespace Platformer_Game
             this.Name = "PlatformerGame_InGame_Form";
             this.Text = "Form1";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PlayerMovement_KeysDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PlayerMovement_KeysPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PlayerMovement_KeysUp);
             ((System.ComponentModel.ISupportInitialize)(this.Ground_PictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Player_PictureBox)).EndInit();

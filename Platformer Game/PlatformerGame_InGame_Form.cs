@@ -8,7 +8,7 @@ namespace Platformer_Game
     {
         public static PictureBox player;
         public static PictureBox ground;
-
+        //////////>>    <<\\\\\\\\\\\
         public PlatformerGame_InGame_Form()
         {
             InitializeComponent();
@@ -18,21 +18,20 @@ namespace Platformer_Game
             Game_Update_Timer.Start();
 
         }
-
+        //////////>>    <<\\\\\\\\\\\
         private void Game_Update_Timer_Tick(object sender, EventArgs e)
         {
             if (player.Location != Player_PictureBox.Location)
-                player.Location = Player_PictureBox.Location;
-            //ground = Ground_PictureBox1;
+                player.Location = Player_PictureBox.Location;           
 
             Player_Engine.PlayerUpdate();
 
             Player_PictureBox.Location = new Point(player.Location.X, player.Location.Y);
         }
-
+        //////////>>    <<\\\\\\\\\\\
         private void PlayerMovement_KeysDown(object sender, KeyEventArgs e)
         {
-
+            //////////>>    <<\\\\\\\\\\\
             if (Player_Engine.IsGrounded())
             {
                 if (e.KeyData == Keys.A || e.KeyData == Keys.Left
@@ -43,24 +42,31 @@ namespace Platformer_Game
                     if (e.KeyData == Keys.Space)
                         Player_Engine.canJump = true;
                 }
-
+                //////////>>    <<\\\\\\\\\\\
                 else if (e.KeyData == Keys.D || e.KeyData == Keys.Right
                     || e.KeyData == Keys.D && e.KeyData == Keys.Space)
                 {
                     Player_Engine.moveRight = true;
 
                 }
-
+                //////////>>    <<\\\\\\\\\\\
                 else if (e.KeyData == Keys.Space)
                     Player_Engine.canJump = true;
             }
+            //////////>>    <<\\\\\\\\\\\
+            else if (!Player_Engine.IsGrounded())
+            {
+                if (Player_Engine.canJump)
+                {
+                    Player_Engine.moveLeft = false;
+                    Player_Engine.moveRight = false;
+                }
+            }
         }
-
+        //////////>>    <<\\\\\\\\\\\
         private void PlayerMovement_KeysUp(object sender, KeyEventArgs e)
         {
-
             if (e.KeyData == Keys.A || e.KeyData == Keys.Left)
-            //|| e.KeyData == Keys.D && e.KeyData == Keys.Space)
             {
                 Player_Engine.moveLeft = false;
                 if (!Player_Engine.IsGrounded())
@@ -69,13 +75,16 @@ namespace Platformer_Game
             }
 
             else if (e.KeyData == Keys.D || e.KeyData == Keys.Right)
-            //|| e.KeyData == Keys.D && e.KeyData == Keys.Space)
             {
                 Player_Engine.moveRight = false;
                 if (!Player_Engine.IsGrounded())
                     Player_Engine.moveRight = true;
-
             }
+        }
+        //////////>>    <<\\\\\\\\\\\
+        private void PlayerMovement_KeysPress(object sender, KeyPressEventArgs e)
+        {
+
         }
     }
 }

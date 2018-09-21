@@ -13,13 +13,13 @@ namespace Platformer_Game
         public static bool moveLeft = false, moveRight = false, canJump = false;
 
         public static int playerX, playerY;
-        
 
+        //////////>>    <<\\\\\\\\\\\
         public Player_Engine()
         {
             Console.WriteLine("Player Engine has Started!");
         }
-
+        //////////>>    <<\\\\\\\\\\\
         public static void PlayerUpdate()
         {
             player = PlatformerGame_InGame_Form.player;
@@ -27,9 +27,9 @@ namespace Platformer_Game
             playerY = PlatformerGame_InGame_Form.player.Location.Y;
 
             PlayerCollisionCheck();
-            PlatformerGame_InGame_Form.player.Location = new Point(MovePlayer(playerX), JumpPlayer(playerY));
+            PlatformerGame_InGame_Form.player.Location = new Point(MovePlayer(Convert.ToInt32(playerX)), JumpPlayer(playerY));
         }
-
+        //////////>>    <<\\\\\\\\\\\
         private static int JumpPlayer(int y)
         {
             if (isGrounded && canJump)
@@ -38,91 +38,92 @@ namespace Platformer_Game
                 y -= Gravity_Engine.JumpGravity();
                 isGrounded = false;
             }
-
+            //////////>>    <<\\\\\\\\\\\
             else if (!isGrounded && canJump)
                 y -= Gravity_Engine.JumpGravity();
-
+            //////////>>    <<\\\\\\\\\\\
             else if (!isGrounded && !canJump)
             {
                 y += Gravity_Engine.FallingGravity();
             }
             return y;
         }
-
+        //////////>>    <<\\\\\\\\\\\
         private static int MovePlayer(int x)
         {
-            int noChangeX = x;
-
+            float noChangeX = x;
+            //////////>>    <<\\\\\\\\\\\
             if (isGrounded)
             {
                 if (moveLeft)
-                {
-                    x -= Gravity_Engine.ExcellerateCalculater();                    
-                }
+                    x -= Gravity_Engine.ExcellerateCalculater();
+
                 else if (moveRight)
-                {
                     x += Gravity_Engine.ExcellerateCalculater();                    
-                }
+                //////////>>    <<\\\\\\\\\\\
                 else
                 {
-                    if (Gravity_Engine.ExcellerateCalculater() > 0)
+                    if (Gravity_Engine.xSpeed >= 0)
                     {
                         if (x < noChangeX)
-                            x += Gravity_Engine.ExcellerateCalculater();
+                            x += Gravity_Engine.DeExcellerateCalculater();
                         else if (x > noChangeX)
-                            x -= Gravity_Engine.ExcellerateCalculater();                      
+                            x -= Gravity_Engine.DeExcellerateCalculater();
                     }
+
                     else
                     {
+                        x = 0;
                         Gravity_Engine.SetAirSpeed("Stop");
                     }
-                    Console.WriteLine(Gravity_Engine.ExcellerateCalculater());
                 }
             }
+            //////////>>    <<\\\\\\\\\\\
             else
             {
                 if (moveLeft)
-                {
-                    x -= Gravity_Engine.ExcellerateCalculater();
-                }
+                    x -= Gravity_Engine.InAirMovement();
+
                 else if (moveRight)
+                    x += Gravity_Engine.InAirMovement();
+
+                else
                 {
-                    x += Gravity_Engine.ExcellerateCalculater();
-                }
+                    if (x < noChangeX)
+                        x += Gravity_Engine.InAirMovement();
+                    else if (x > noChangeX)
+                        x -= Gravity_Engine.InAirMovement();
+                }                   
             }
+            //////////>>    <<\\\\\\\\\\\
             return x;
         }
-
+        //////////>>    <<\\\\\\\\\\\
         public static bool IsGrounded()
         {
             return isGrounded;
         }
-
+        //////////>>    <<\\\\\\\\\\\
         public static bool CanJump()
         {
             return canJump;
         }
-
+        //////////>>    <<\\\\\\\\\\\
         private static void PlayerCollisionCheck()
         {
-            //if (!Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
-            //    isGrounded = false;
-            
-            
             if (Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
             {
-                Console.WriteLine("Made Collision");
                 if (!isGrounded)
                 {
                     isGrounded = true;
-                    Console.WriteLine("Made Collision");
-                } 
-
-
-
+                    canJump = false;
+                    moveLeft = false;
+                    moveRight = false;
+                }
+                else
+                    return;
             }
-            //else if (!Collision_Engine.CollisionCheck(PlatformerGame_InGame_Form.player, PlatformerGame_InGame_Form.ground))
-            //    isGrounded = false;
+            //////////>>    <<\\\\\\\\\\\
             else
                 return;
         }

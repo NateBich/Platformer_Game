@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+
 
 namespace Platformer_Game
 {
@@ -7,58 +8,68 @@ namespace Platformer_Game
         private static int gravity = 10;
         private static int airSpeed;
 
-        private static int xSpeed = 0;
+        public static int xSpeed = 0;
         private static int momentum = 10;
 
-
+        //////////>>    <<\\\\\\\\\\\
         public static int ExcellerateCalculater()
         {
             if (xSpeed <= momentum)
             {
-                xSpeed++;
-                //return xSpeed;
-            }
-            //else
+                xSpeed += 3 / 2;
                 return xSpeed;
-        }
-
-        public static int DeExcellerateCalculater()
-        {
-            if (xSpeed > 0 )
-            {
-                
-                xSpeed -= 1;
-
             }
+            else
+                xSpeed = momentum;
+            Console.WriteLine(xSpeed);
             return xSpeed;
         }
+        //////////>>    <<\\\\\\\\\\\
+        public static int DeExcellerateCalculater()
+        {
+            if (xSpeed > 0)
+            {
+                xSpeed -= 3 / 2;
+            }
+            else
+                xSpeed = 0;
+            Console.WriteLine(xSpeed);
+            return xSpeed;
+        }
+        //////////>>    <<\\\\\\\\\\\
+        public static int InAirMovement()
+        {
+            if (xSpeed >= 5)
+                xSpeed -= 1 / 16;
 
+            else
+                xSpeed = 5;
+            Console.WriteLine(xSpeed);
+            return xSpeed;
+        }
+        //////////>>    <<\\\\\\\\\\\
         public static int FallingGravity()
         {
             if (airSpeed <= gravity)
             {
                 airSpeed++;
-                return airSpeed;
+                //return airSpeed;
             }
-            else
+            //else
                 return airSpeed;
         }
-
+        //////////>>    <<\\\\\\\\\\\
         public static int JumpGravity()
         {
-
             if (airSpeed > 0)
-            {
-                airSpeed -= 1;
-                return airSpeed;
-            }
-            else
-            {
-                Player_Engine.canJump = false;                
-                return airSpeed;
-            }
-        }
+                airSpeed--;
 
+            else
+                Player_Engine.canJump = false;                
+
+            return airSpeed;
+        }
+        //////////>>    <<\\\\\\\\\\\
         public static void SetAirSpeed(string direction)
         {
             switch (direction)
@@ -72,7 +83,7 @@ namespace Platformer_Game
                 case "Stop":
                     xSpeed = 0;
                     break;
-        }
+            }
         }
     }
 }
